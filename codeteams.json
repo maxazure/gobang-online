@@ -1,0 +1,10 @@
+{
+  "pm": {
+    "pane": "%0",
+    "remark": "provider:zai"
+  },
+  "dev": {
+    "pane": "%1",
+    "remark": "provider:kimi"
+  }
+}
