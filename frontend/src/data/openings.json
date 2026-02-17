@@ -1,0 +1,158 @@
+{
+  "description": "五子棋开局库 - 常见开局定式",
+  "version": "1.0.0",
+  "openings": [
+    {
+      "name": "花月",
+      "description": "最强开局之一，黑方优势巨大",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 7, "col": 8, "player": 2 },
+        { "row": 8, "col": 7, "player": 1 }
+      ],
+      "tags": ["优势", "推荐"]
+    },
+    {
+      "name": "浦月",
+      "description": "黑方必胜开局",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 8, "col": 8, "player": 2 },
+        { "row": 8, "col": 7, "player": 1 }
+      ],
+      "tags": ["必胜", "经典"]
+    },
+    {
+      "name": "流星",
+      "description": "开局位置偏离中心，局势复杂",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 6, "col": 7, "player": 2 },
+        { "row": 8, "col": 7, "player": 1 }
+      ],
+      "tags": ["平衡", "复杂"]
+    },
+    {
+      "name": "云月",
+      "description": "白方有多种应对方式",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 8, "col": 6, "player": 2 },
+        { "row": 8, "col": 7, "player": 1 }
+      ],
+      "tags": ["平衡"]
+    },
+    {
+      "name": "雨月",
+      "description": "白方有强防",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 6, "col": 8, "player": 2 },
+        { "row": 8, "col": 7, "player": 1 }
+      ],
+      "tags": ["防守"]
+    },
+    {
+      "name": "金星",
+      "description": "黑方优势明显",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 8, "col": 7, "player": 2 },
+        { "row": 7, "col": 8, "player": 1 }
+      ],
+      "tags": ["优势"]
+    },
+    {
+      "name": "松月",
+      "description": "局势较为开放",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 8, "col": 7, "player": 2 },
+        { "row": 8, "col": 8, "player": 1 }
+      ],
+      "tags": ["平衡", "开放"]
+    },
+    {
+      "name": "山月",
+      "description": "黑方有一定优势",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 7, "col": 6, "player": 2 },
+        { "row": 8, "col": 7, "player": 1 }
+      ],
+      "tags": ["优势"]
+    },
+    {
+      "name": "瑞星",
+      "description": "经典平衡开局",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 7, "col": 8, "player": 2 },
+        { "row": 8, "col": 8, "player": 1 }
+      ],
+      "tags": ["平衡", "经典"]
+    },
+    {
+      "name": "寒星",
+      "description": "白方有强防手段",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 6, "col": 6, "player": 2 },
+        { "row": 8, "col": 7, "player": 1 }
+      ],
+      "tags": ["防守", "复杂"]
+    },
+    {
+      "name": "天川",
+      "description": "传统开局，局势平衡",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 6, "col": 7, "player": 2 },
+        { "row": 8, "col": 8, "player": 1 }
+      ],
+      "tags": ["平衡", "传统"]
+    },
+    {
+      "name": "溪月",
+      "description": "白方有多种应对",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 6, "col": 8, "player": 2 },
+        { "row": 8, "col": 8, "player": 1 }
+      ],
+      "tags": ["平衡", "变化多"]
+    },
+    {
+      "name": "游星",
+      "description": "偏离中心的开局",
+      "moves": [
+        { "row": 7, "col": 7, "player": 1 },
+        { "row": 6, "col": 6, "player": 2 },
+        { "row": 8, "col": 8, "player": 1 }
+      ],
+      "tags": ["复杂", "少见"]
+    }
+  ],
+  "recommended_openings": [
+    {
+      "name": "花月",
+      "priority": 1
+    },
+    {
+      "name": "浦月",
+      "priority": 2
+    },
+    {
+      "name": "瑞星",
+      "priority": 3
+    },
+    {
+      "name": "云月",
+      "priority": 4
+    },
+    {
+      "name": "流星",
+      "priority": 5
+    }
+  ]
+}
