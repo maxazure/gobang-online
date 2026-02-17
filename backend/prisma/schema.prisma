@@ -1,0 +1,325 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// 1. 用户表
+// ==========================================
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  displayName   String    @map("display_name")
+  avatarUrl     String?   @map("avatar_url")
+
+  // 等级分系统
+  rating        Int       @default(1200)
+  tier          Tier      @default(BRONZE)
+
+  // 账户状态
+  isVerified    Boolean   @default(false) @map("is_verified")
+  isActive      Boolean   @default(true) @map("is_active")
+
+  // 时间戳
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  lastLoginAt   DateTime? @map("last_login_at")
+
+  // 关联关系
+  gamesAsBlack  Game[]    @relation("BlackPlayer")
+  gamesAsWhite  Game[]    @relation("WhitePlayer")
+  gamesWon      Game[]    @relation("Winner")
+  stats         UserStats?
+
+  // 好友关系
+  friendships   Friendship[] @relation("UserFriendships")
+  friendOf      Friendship[] @relation("FriendOf")
+
+  // 排行榜
+  leaderboard   Leaderboard?
+
+  // 聊天消息
+  messages      ChatMessage[]
+
+  @@index([email])
+  @@index([rating])
+  @@index([tier])
+  @@map("users")
+}
+
+// 段位枚举
+enum Tier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+  DIAMOND
+  MASTER
+  GRANDMASTER
+}
+
+// ==========================================
+// 2. 游戏记录表
+// ==========================================
+model Game {
+  id              String      @id @default(cuid())
+
+  // 玩家
+  blackPlayerId   String      @map("black_player_id")
+  blackPlayer     User        @relation("BlackPlayer", fields: [blackPlayerId], references: [id])
+
+  whitePlayerId   String      @map("white_player_id")
+  whitePlayer     User        @relation("WhitePlayer", fields: [whitePlayerId], references: [id])
+
+  winnerId        String?     @map("winner_id")
+  winner          User?       @relation("Winner", fields: [winnerId], references: [id])
+
+  // 游戏数据
+  moves           Json        // 存储走棋记录 [{x, y, player, timestamp}]
+  boardSize       Int         @default(15) @map("board_size")
+
+  // 游戏模式
+  gameMode        GameMode    @default(CASUAL) @map("game_mode")
+  timeControl     Int?        @map("time_control") // 单位：秒/步
+
+  // 游戏状态
+  status          GameStatus  @default(ONGOING)
+  result          GameResult?
+
+  // 时间戳
+  createdAt       DateTime    @default(now()) @map("created_at")
+  endedAt         DateTime?   @map("ended_at")
+
+  @@index([blackPlayerId])
+  @@index([whitePlayerId])
+  @@index([winnerId])
+  @@index([createdAt])
+  @@index([gameMode])
+  @@index([status])
+  @@map("games")
+}
+
+enum GameMode {
+  CASUAL        // 休闲模式
+  RANKED        // 排位模式
+  AI_BATTLE     // AI对战
+  PRIVATE       // 私人房间
+}
+
+enum GameStatus {
+  ONGOING       // 进行中
+  COMPLETED     // 已完成
+  ABORTED       // 中止
+  TIMEOUT       // 超时
+}
+
+enum GameResult {
+  BLACK_WIN     // 黑胜
+  WHITE_WIN     // 白胜
+  DRAW          // 平局
+}
+
+// ==========================================
+// 3. 好友关系表
+// ==========================================
+model Friendship {
+  id        String            @id @default(cuid())
+
+  userId    String            @map("user_id")
+  user      User              @relation("UserFriendships", fields: [userId], references: [id])
+
+  friendId  String            @map("friend_id")
+  friend    User              @relation("FriendOf", fields: [friendId], references: [id])
+
+  status    FriendshipStatus  @default(PENDING)
+
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+  @@index([status])
+  @@map("friendships")
+}
+
+enum FriendshipStatus {
+  PENDING   // 等待接受
+  ACCEPTED  // 已接受
+  BLOCKED   // 已屏蔽
+}
+
+// ==========================================
+// 4. 聊天消息表
+// ==========================================
+model ChatMessage {
+  id          String      @id @default(cuid())
+
+  // 房间ID（lobby 或具体房间ID）
+  roomId      String      @map("room_id")
+
+  // 发送者
+  userId      String      @map("user_id")
+  user        User        @relation(fields: [userId], references: [id])
+
+  // 消息内容
+  content     String
+  messageType MessageType @default(TEXT) @map("message_type")
+
+  // 时间戳
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([roomId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("chat_messages")
+}
+
+enum MessageType {
+  TEXT      // 文本消息
+  SYSTEM    // 系统消息
+  EMOTE     // 表情
+}
+
+// ==========================================
+// 5. 排行榜表
+// ==========================================
+model Leaderboard {
+  id        String   @id @default(cuid())
+
+  userId    String   @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+
+  seasonId  String   @map("season_id")
+
+  // 统计数据
+  rating    Int      @default(1200)
+  wins      Int      @default(0)
+  losses    Int      @default(0)
+  draws     Int      @default(0)
+  rank      Int?     // 排名
+
+  // 时间戳
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, seasonId])
+  @@index([seasonId])
+  @@index([rating])
+  @@index([rank])
+  @@map("leaderboards")
+}
+
+// ==========================================
+// 6. 用户统计表
+// ==========================================
+model UserStats {
+  id            String   @id @default(cuid())
+
+  userId        String   @unique @map("user_id")
+  user          User     @relation(fields: [userId], references: [id])
+
+  // 总战绩
+  totalGames    Int      @default(0) @map("total_games")
+  wins          Int      @default(0)
+  losses        Int      @default(0)
+  draws         Int      @default(0)
+
+  // 连胜记录
+  winStreak     Int      @default(0) @map("win_streak")
+  maxWinStreak  Int      @default(0) @map("max_win_streak")
+
+  // 游戏模式统计 (JSON 存储)
+  modeStats     Json?    @map("mode_stats")
+  // { "casual": { "wins": 10, "losses": 5 }, "ranked": { ... } }
+
+  // 作为黑/白方统计
+  blackGames    Int      @default(0) @map("black_games")
+  blackWins     Int      @default(0) @map("black_wins")
+  whiteGames    Int      @default(0) @map("white_games")
+  whiteWins     Int      @default(0) @map("white_wins")
+
+  // 时间戳
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([totalGames])
+  @@index([wins])
+  @@map("user_stats")
+}
+
+// ==========================================
+// 7. 房间表（额外添加）
+// ==========================================
+model Room {
+  id          String     @id @default(cuid())
+
+  hostId      String     @map("host_id")
+  name        String?
+
+  // 房间设置
+  isPublic    Boolean    @default(true) @map("is_public")
+  password    String?    // 私密房间密码
+  maxPlayers  Int        @default(2) @map("max_players")
+
+  // 游戏设置
+  gameMode    GameMode   @default(CASUAL) @map("game_mode")
+  timeControl Int?       @map("time_control")
+
+  // 状态
+  status      RoomStatus @default(WAITING)
+
+  // 当前玩家列表 (JSON 存储)
+  players     Json?      // [{ userId, color, ready }]
+
+  // 观战者列表
+  spectators  Json?      // [userId, userId, ...]
+
+  // 关联游戏
+  gameId      String?    @unique @map("game_id")
+
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@index([hostId])
+  @@index([status])
+  @@index([isPublic])
+  @@map("rooms")
+}
+
+enum RoomStatus {
+  WAITING     // 等待中
+  PLAYING     // 游戏中
+  CLOSED      // 已关闭
+}
+
+// ==========================================
+// 8. 赛季表（额外添加）
+// ==========================================
+model Season {
+  id          String    @id @default(cuid())
+
+  name        String
+  description String?
+
+  startDate   DateTime  @map("start_date")
+  endDate     DateTime  @map("end_date")
+
+  isActive    Boolean   @default(true) @map("is_active")
+
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@index([isActive])
+  @@index([startDate])
+  @@map("seasons")
+}

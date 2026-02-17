@@ -8,21 +8,21 @@
 - [x] 1.6 配置 CI/CD 流程（GitHub Actions）
 - [x] 1.7 设置前端部署（Vercel）
 - [x] 1.8 设置后端部署（Railway）
-- [ ] 1.9 配置数据库（Supabase PostgreSQL）
+- [x] 1.9 配置数据库（Supabase PostgreSQL）
 - [ ] 1.10 配置 Redis（Redis Cloud）
 - [ ] 1.11 设置监控和日志（Sentry + LogRocket）
 
 ## 2. 数据库设计和建模
 
-- [ ] 2.1 设计用户表（users）
-- [ ] 2.2 设计游戏记录表（games）
-- [ ] 2.3 设计好友关系表（friendships）
-- [ ] 2.4 设计聊天消息表（chat_messages）
-- [ ] 2.5 设计排行榜表（leaderboards）
-- [ ] 2.6 设计用户统计表（user_stats）
-- [ ] 2.7 创建数据库迁移脚本
-- [ ] 2.8 设置数据库索引优化
-- [ ] 2.9 配置数据库备份策略
+- [x] 2.1 设计用户表（users）
+- [x] 2.2 设计游戏记录表（games）
+- [x] 2.3 设计好友关系表（friendships）
+- [x] 2.4 设计聊天消息表（chat_messages）
+- [x] 2.5 设计排行榜表（leaderboards）
+- [x] 2.6 设计用户统计表（user_stats）
+- [x] 2.7 创建数据库迁移脚本（Prisma schema）
+- [x] 2.8 设置数据库索引优化（复合索引、外键索引）
+- [x] 2.9 配置数据库备份策略（备份脚本、恢复脚本）
 
 ## 3. 核心游戏功能 - 棋盘和规则
 
