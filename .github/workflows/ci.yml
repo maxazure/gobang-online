@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-type-check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies (root)
+        run: pnpm install
+
+      - name: Install dependencies (frontend)
+        run: cd frontend && pnpm install
+
+      - name: Install dependencies (backend)
+        run: cd backend && pnpm install
+
+      - name: Type check (frontend)
+        run: cd frontend && pnpm type-check
+
+      - name: Type check (backend)
+        run: cd backend && pnpm type-check
+
+      - name: Lint (frontend)
+        run: cd frontend && pnpm lint
+
+      - name: Lint (backend)
+        run: cd backend && pnpm lint
+
+      - name: Build (frontend)
+        run: cd frontend && pnpm build
+
+      - name: Build (backend)
+        run: cd backend && pnpm build

@@ -1,13 +1,13 @@
 ## 1. 项目初始化和环境搭建
 
-- [ ] 1.1 初始化前端项目（React 18 + TypeScript + Vite）
-- [ ] 1.2 初始化后端项目（Node.js + Express + TypeScript）
-- [ ] 1.3 配置代码规范（ESLint + Prettier）
-- [ ] 1.4 配置 Git hooks（Husky + lint-staged）
-- [ ] 1.5 设置开发环境和生产环境配置
-- [ ] 1.6 配置 CI/CD 流程（GitHub Actions）
-- [ ] 1.7 设置前端部署（Vercel）
-- [ ] 1.8 设置后端部署（Railway）
+- [x] 1.1 初始化前端项目（React 18 + TypeScript + Vite）
+- [x] 1.2 初始化后端项目（Node.js + Express + TypeScript）
+- [x] 1.3 配置代码规范（ESLint + Prettier）
+- [x] 1.4 配置 Git hooks（Husky + lint-staged）
+- [x] 1.5 设置开发环境和生产环境配置
+- [x] 1.6 配置 CI/CD 流程（GitHub Actions）
+- [x] 1.7 设置前端部署（Vercel）
+- [x] 1.8 设置后端部署（Railway）
 - [ ] 1.9 配置数据库（Supabase PostgreSQL）
 - [ ] 1.10 配置 Redis（Redis Cloud）
 - [ ] 1.11 设置监控和日志（Sentry + LogRocket）
